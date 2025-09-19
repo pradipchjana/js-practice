@@ -1,0 +1,9 @@
+ A password that contain only numbers....
+
+ **Expectations** : Our goal is to find out the password.... 
+
+ if it able to find out ... then show the password..
+
+password : "3456"
+so its check all possiblities like "1","2","3"....
+then "11", "12","13"... and so on
