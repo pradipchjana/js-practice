@@ -5,35 +5,38 @@ const testCase3 = "L     Z";
 const testCase4 = "L     L";         
 const testCase5 = "Z   Z   Z";         
 const testCase6 =  "L  ZL Z";
+const testCase7 = "  ";
+const testCase8 = " Z  L L  Z";
 
-const testCaseToUse = testCase6;
+const testCaseToUse = testCase8;
 const lion = "L";
 const zebra = "Z";
 
 let distance = -1;
 let ifNoZebraOrLion = -1;
 let nearestZebra = 0;
-let smallDistance = Infinity;
+let shortestDistance = Infinity;
 
 for (let lionFinder = 0; lionFinder < testCaseToUse.length; lionFinder++) {
 
-  if(testCaseToUse[lionFinder] === lion){
+  
+  let zebraFinder = 0;
+  while (zebraFinder < testCaseToUse.length && testCaseToUse[lionFinder] === lion) {
 
-    for (let zebraFinder = 0; zebraFinder < testCaseToUse.length; zebraFinder++) {
+    if(testCaseToUse[zebraFinder] === zebra){
 
-      if(testCaseToUse[zebraFinder] === zebra){
+      distance = ((lionFinder < zebraFinder) ? (zebraFinder - lionFinder) : (lionFinder - zebraFinder)) - 1;
 
-        distance = ((lionFinder < zebraFinder) ? (zebraFinder - lionFinder) : (lionFinder - zebraFinder)) - 1;
+      //console.log(distance);
+      shortestDistance = (shortestDistance < distance) ? shortestDistance : distance;
+      //console.log(smallDistance);
 
-        //console.log(distance);
-        smallDistance = (smallDistance < distance) ? smallDistance : distance;
-        //console.log(smallDistance);
-
-      }
     }
+    zebraFinder++;
   }
+  
 }
-nearestZebra = (distance === -1) ? ifNoZebraOrLion : smallDistance;
+nearestZebra = (distance === -1) ? ifNoZebraOrLion : shortestDistance;
 
 console.log("Input: ", testCaseToUse, "Output: ",nearestZebra);
 
