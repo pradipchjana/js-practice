@@ -1,1 +1,2 @@
-console.log("hello world");
+let longFence = "helloooooo";
+console.log(longFence);
