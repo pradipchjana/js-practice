@@ -11,20 +11,28 @@ function findType(letter) {
 }
 
 function splitAWord(string) {
-  let type = findType(string[0]);
-  let front = string[0];
-  let back = '';
-  for (let index = 1; index < string.length; index++) {
-    const currType = findType(string[index]);
-    const isSameType = type === currType;
-    if (isSameType) {
-      back = back + ',' + string[index];
-    } else {
-      front = front + string[index];
+  let text = string;
+  let result = '';
+  while (text.length > 0) {
+
+    let type = findType(text[0]);
+    let front = text[0];
+    let back = '';
+    for (let index = 1; index < text.length; index++) {
+      const currType = findType(text[index]);
+      const isSameType = type === currType;
+      if (isSameType) {
+        back = back + text[index];
+      } else {
+        front = front + text[index];
+      }
+      type = currType;
     }
-    type = currType;
+
+    text = back;
+    const separator = back.length >= 1 ? "," : "";
+    result = result + front + separator;
   }
-  const result = front + back
   return result;
 }
 
@@ -56,6 +64,9 @@ function testAll() {
   testSplitAWord('bcad', 'bad,c');
   testSplitAWord('abcde', 'abe,c,d');
   testSplitAWord('apple', 'ape,p,l');
+  testSplitAWord('bbaacdef', 'bacef,bad');
+  testSplitAWord('aaabbb', 'ab,ab,ab');
+  testSplitAWord('thoughtworks', 'togor,huh,t,w,k,s');
 }
 
 testAll();
