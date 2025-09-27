@@ -27,4 +27,7 @@ Write a ptogram that takes a single word as input and prints out 'new words' aco
 |'bacd'|'bac,d'|
 |'bcad'|'bad,c,d'|
 |'abcde'|'abe',c,d'|
-
+|'apple'|'ape,p,l'|
+|'bbaacdef'|'bacef,bad'|
+|'aaabbb'|'ab,ab,ab'|
+|'thoughtworks'|'togor,huh,t,w,k,s'|
