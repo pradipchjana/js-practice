@@ -6,6 +6,7 @@ These words force your fingers to rapidly use adjacent keys, which breaks
 the flow of standard touch-typing and leads to errors under pressure.
 
 | Word	| Length |	QWERTY Challenge |
+| --- | --- | --- |
 | PULSARS	| 7	| Jump between home row and top row (S to A jump) |
 | DIAPHRAGM |	10	| The PHR and GM clusters are very awkward. |
 | SWERVING |	8	| Many keys typed by the left hand's index finger in succession |
@@ -17,6 +18,7 @@ the flow of standard touch-typing and leads to errors under pressure.
 These words either contain unusual double letters, rare letter combinations, or spellings that override common typing habits.
 
 | Word	| Length | QWERTY Challenge |
+| --- | --- | --- |
 | VACUUM	| 6	| Rare double U is often misspelled (VACCUM). |
 | MAINTENANCE |	11	|Often typed as MAINTAINANCE—a common misspelling trap. |
 | JEOPARDY |	8	|The EO and RD cluster is an awkward sequence. |
@@ -27,6 +29,7 @@ These words either contain unusual double letters, rare letter combinations, or 
 The ultimate tier for maximum time pressure. These are very long or contain the most difficult combinations of keys.
 
 | Word	| Length |	QWERTY Challenge |
+| --- | --- | --- |
 | PERSPICUOUS |	11	| Very long run of alternating S and P keys. |
 | QUOTIENT |	8	QUOT | requires a tight sequence of two top-row fingers. |
 | CHRONOLOGY |	10	| Silent H and awkward CHR opening. |
