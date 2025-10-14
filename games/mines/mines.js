@@ -1,4 +1,4 @@
-const game = [
+let game = [
   '✅', '⬜️', '⬜️', '⬜️', '⬜️', '⬜️', '⬜️', '⬜️', '⬜️', '⬜️',
   '⬜️', '⬜️', '⬜️', '⬜️', '⬜️', '⬜️', '⬜️', '⬜️', '⬜️', '⬜️',
   '⬜️', '⬜️', '⬜️', '⬜️', '⬜️', '⬜️', '⬜️', '⬜️', '⬜️', '⬜️',
@@ -24,13 +24,14 @@ const route = [
   false, false, false, false, false, false, false, false, true, true
 ]
 
+let LIMIT = 7;
+
 function showField() {
   let result = [];
   for (let index = 0; index < 10; index++) {
     result.push(game.slice(index * 10, (index + 1) * 10).join(" "));
   }
   console.log(result.join('\n'));
-
 }
 
 function moveLeft(current) {
@@ -63,13 +64,13 @@ function moveDown(current) {
 
 function findMove(input, current) {
   switch (input) {
-    case 'l': return moveLeft(current);
-    case 'r': return moveRight(current);
-    case 'u': return moveUp(current);
-    case 'd': return moveDown(current);
+    case 'a': return moveLeft(current);
+    case 'd': return moveRight(current);
+    case 'w': return moveUp(current);
+    case 's': return moveDown(current);
     default:
       console.log("Invalid, you can only go your nearest, type again");
-      return play(current);
+      play(current);
   }
 }
 
@@ -79,26 +80,51 @@ function checkValidPath(move) {
 
 function play(current) {
   showField();
-  console.log("You are in " + current + "position");
-  const input = prompt("Enter Your move,(l/r/u/d)");
+  const input = prompt("Enter Your move,(w/s/a/d)");
   const move = findMove(input, current);
+  console.clear();
   if (move === -1) {
     console.log("Invalid Move, type again");
-    return play(current);
+    play(current);
+    return ;
   }
+
   if (move === 99) {
     console.log("You Win");
+    game[move] = "✅";
+    showField();
     return;
   }
   if (checkValidPath(move)) {
     console.log("Valid Move,Go ahead");
-    game[move] = "✅"
+    game[move] = "✅";
     current = move;
-    return play(current);
+    play(current);
+    return;
   }
-  console.log("You stepped on mine, You loose the game");
-  game[move] = '💣';
+  LIMIT = LIMIT - 1;
+  game[move] = '💥';
   showField();
+  if (LIMIT !== 0) {
+    console.clear();
+    console.log("You Loose! Now, You have " + LIMIT + " changes");
+    
+    const resetField = game.fill("⬜️");
+    resetField.shift();
+    resetField.unshift("✅");
+    game = resetField;
+    play(0);
+    return;
+  }
+
+  console.log("You don't have any changes");
+  
   return;
 }
-play(0);
+function start() {
+  console.log("You have 7 changes");
+  
+  console.log("W for up, S for down, A for left, D for right");
+  play(0);
+}
+start();
