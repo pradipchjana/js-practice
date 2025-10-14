@@ -5,11 +5,16 @@ function generateRandomNumber(length) {
   return Math.floor(Math.random() * length);
 }
 
-let snakeX = 7;
-let snakeY = 6;
+let snakeX = [5, 5, 5];
+let snakeY = [5, 4, 3];
 let foodX = generateRandomNumber(WIDTH);
 let foodY = generateRandomNumber(HIGHT);
 let score = 0;
+const EAST = 'EAST';
+const NORTH = 'NORTH';
+const SOUTH = 'SOUTH';
+const WEST = 'WEST';
+let direction = EAST;
 let gameOver = false;
 
 function draw() {
@@ -19,44 +24,107 @@ function draw() {
     for (let x = 0; x < WIDTH; x++) {
       if (y === 0 || x === 0 || y === HIGHT - 1 || x === WIDTH - 1) {
         row += "🌲";
-      } else if (x === snakeX && y === snakeY) {
-        row += "🐲";
       } else if (x === foodX && y === foodY) {
         row += '🐰';
       } else {
-        row += '  '
+        let found = false;
+        for (let index = 0; index < snakeX.length; index++) {
+          if (snakeX[index] === x && snakeY[index] === y) {
+            if (index == 0) {
+              row+="🟢";
+            }else{
+              row += "🟩";
+            }
+            found = true;
+            break;
+          }
+        }
+        if(!found){
+          row += "  ";
+        }
       }
     }
     console.log(row);
   }
   console.log(score);
-
 }
 
+const directions = [NORTH, EAST, SOUTH, WEST];
+const movementKeys = ['w', 'd', 's', 'a'];
+
 function move(moves) {
-  switch (moves) {
-    case 'a': snakeX = snakeX !== 1 ? snakeX - 1 : WIDTH - 2; break;
-    case 'd': snakeX = snakeX !== WIDTH - 2 ? snakeX + 1 : 1; break;
-    case 'w': snakeY = snakeY !== 1 ? snakeY - 1 : HIGHT - 2; break;
-    case 's': snakeY = snakeY !== HIGHT - 2 ? snakeY + 1 : 1; break;
+  let newX = snakeX[0];
+  let newY = snakeY[0];
+
+  let movementKey = moves.trim() !== "" ? moves.trim() : movementKeys[directions.indexOf(direction)]
+
+  switch (movementKey) {
+    case 'a': {
+      direction = WEST;
+      newX--; 
+      break
+    };
+    case 'd': {
+      direction = EAST;
+      newX++; 
+      break;
+    }
+    case 'w': {
+      direction = NORTH;
+      newY--; 
+      break;
+    }
+    case 's': {
+      direction = SOUTH;
+      newY++; 
+      break;
+    }
+    default: 
+    console.clear();
+    draw();
+    play();
+  }
+  
+  if (newX <= 0 || newY <= 0 || newX >= WIDTH || newY >= HIGHT) {
+    gameOver = true;
+    return;
+  }
+  
+  for (let index = 0; index < snakeX.length; index++) {
+    if (snakeX[index] === newX && snakeY[index] === newY) {
+      gameOver = true;
+      return;
+    }
+  }
+  
+  snakeX.unshift(newX);
+  snakeY.unshift(newY);
+  if (newX === foodX && newY === foodY) {
+    score++;
+    changeFoodLocation();
+  }else{
+    snakeX.pop();
+    snakeY.pop();
   }
 }
 
 function changeFoodLocation() {
-    foodX = generateRandomNumber(WIDTH);
-    foodY = generateRandomNumber(HIGHT);
-    if (foodX === 0 || foodX === WIDTH - 1 || foodY === 0 || foodY === HIGHT - 1) {
-      changeFoodLocation();
-    }
+  foodX = generateRandomNumber(WIDTH);
+  foodY = generateRandomNumber(HIGHT);
+  if (foodX === 0 || foodX === WIDTH - 1 || foodY === 0 || foodY === HIGHT - 1) {
+    changeFoodLocation();
+  }
 }
 
 function play() {
+  if (gameOver) {
+    console.clear();
+    console.log("GameOver 💀");
+    console.log("Your Score: ", score);
+    return;
+  }
   const moves = prompt("Enter Move");
   move(moves);
-  if (snakeX === foodX && snakeY === foodY) {
-    score++;
-    changeFoodLocation();
-  }
   draw();
   play();
 }
