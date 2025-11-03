@@ -6,6 +6,14 @@ function encodeString(data) {
   return data.length + ":" + data;
 }
 
+function encodeList(data){
+  let answer = '';
+  for (let index = 0; index < data.length; index++) {
+    answer += encode(data[index]);
+  }
+  return 'l' + answer + 'e';
+}
+
 function encode(data) {
   if (typeof data === "number") {
     return encodeNumber(data);
@@ -14,7 +22,10 @@ function encode(data) {
   if (typeof data === "string") {
     return encodeString(data);
   }
-  return 'i' + data + 'e';
+
+  if (Array.isArray(data)) {
+    return encodeList(data);
+  }
 }
 
 function consoleMessage(message, isPass) {
@@ -46,7 +57,12 @@ function testAllEncode() {
   testEncode("Negative Number", -43, 'i-43e');
   testEncode("Empty String", "", "0:");
   testEncode("Hello", 'Hello', '5:Hello');
-  testEncode("spacial charecter", "hi! how are you.", '16:hi! how are you.')
+  testEncode("spacial charecter", "hi! how are you.", '16:hi! how are you.');
+  testEncode("Empty list", [], 'le');
+  testEncode("list of Numbers", [1, 123, -32], 'li1ei123ei-32ee');
+  testEncode("list of strings", ['@#$%^', 'le', ''], 'l5:@#$%^2:le0:e')
+  testEncode("list of numbers and strings", [123, 'hello'], 'li123e5:helloe');
+  testEncode("nested lists", [1, ['hello', []]], 'li1el5:helloleee')
 }
 
 function testMain() {
