@@ -79,7 +79,7 @@ function decodeNumber(data) {
 }
 
 function decodeString(data) {
-  return data.slice(2, parseInt(data) + 2);
+  return data.slice(data.indexOf(':') + 1, parseInt(data) + 2);
 }
 
 function findAnswerLength(answer) {
@@ -114,14 +114,10 @@ function decode(data) {
     return decodeNumber(data);
   }
 
-  if (data[1] === ':') {
-    return decodeString(data);
-  }
-
   if (data[0] === 'l') {
     return decodeList(formatData(data));
   }
-
+  return decodeString(data);
 }
 function testDecode(message, data, expectedOutput) {
   const actual = decode(data);
@@ -169,14 +165,15 @@ function testAllDecode() {
   testDecode("zero", 'i0e', 0);
   testDecode("positive number", 'i123e', 123);
   testDecode("Negative Number", 'i-41e', -41);
-  testDecode("string", "5:hello", 'hello');
+  testDecode("string", "13:hello pradip", 'hello pradip');
   testDecode("empty string", '0:', '');
   testDecode("special charecter", '5:@#$%^', '@#$%^');
   testDecode("Empty list", 'le', []);
   testDecode("list of strings", 'l5:hello2:lee', ['hello', 'le']);
   testDecode("list of number", 'li123ei-43ee', [123, -43]);
-  testDecode("list of numbers and strings", 'li123e3:456i6ee', [123, '456', 6])
-  testDecode("Nested list", 'l0:i0el1:pli23eeee', ['', 0, ["p", [23]]])
+  testDecode("list of numbers and strings", 'li123e3:456i6ee', [123, '456', 6]);
+  testDecode("Nested list", 'l0:i0el1:pli23eeee', ['', 0, ["p", [23]]]);
+  testDecode
 }
 
 function testMain() {
