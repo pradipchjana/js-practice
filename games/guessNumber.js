@@ -6,7 +6,7 @@ function guessNumber(number, noOfChance = 5) {
   const choiceString = prompt("Enter your number(1-100)");
   const choice = parseInt(choiceString);
   if (noOfChance === 0) {
-    console.log("You Loose!");
+    console.log("You Loose! ", number);
     return;
   }
   if (choice === number) {
@@ -16,6 +16,8 @@ function guessNumber(number, noOfChance = 5) {
   if (choice > number) {
     console.log("Too high");
   }
+  console.log("Try Again");
+  
   guessNumber(number, noOfChance - 1);
 }
 

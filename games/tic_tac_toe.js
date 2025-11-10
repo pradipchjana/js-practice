@@ -36,68 +36,86 @@ function showTable() {
   console.log(print);
 }
 
-function addChoice(char) {
-
-  return
-}
-
-function onePlayer() {
-  console.log("X player turn");
-  const move = parseInt(prompt("Enter position that you want to play:"));
+function player() {
+  console.log("\nX player turn");
+  const input = parseInt(prompt("Enter position that you want to play:"));
+  const move = input - 1;
   if (move < 0 || move > 8) {
     console.log("Invalid Move");
-    onePlayer();
+    player();
   }
+
   if (mark[move]) {
     mark[move] = false;
     game[move] = 'x';
   } else {
     console.log("this place already taken, chosse valid");
-    onePlayer();
+    player();
+  }
+
+  if (isAllTRaverse(mark)) {
+    console.log("Match Draw");
+    return;
   }
   showTable();
   if (checkWin("x")) {
-    console.log("You win!")
+    console.log("X player win!")
     return;
   }
-  anotherPlayer();
+  bot();
 }
 
-function anotherPlayer() {
-  console.log("O player turn");
-  const move = parseInt(prompt("Enter position that you want to play:"));
+function isAllTRaverse() {
+  for (let index = 0; index < mark.length; index++) {
+    if (mark[index]) {
+      return false;
+    }
+  }
+  return true;
+}
+
+function bot() {
+  console.log("\nO player turn");
+  const input = parseInt(prompt("Enter position that you want to play:"));
+  const move = input - 1;
   if (move < 0 || move > 8) {
     console.log("Invalid Move");
-    anotherPlayer();
+    bot();
   }
+
+  showTable();
   if (mark[move]) {
     mark[move] = false;
     game[move] = 'o';
   } else {
     console.log("this place already taken, chosse valid");
-    anotherPlayer();
+    bot();
   }
-  showTable();
-  if (checkWin("o")) {
-    console.log("You win!")
+
+  if (isAllTRaverse(mark)) {
+    console.log("Match Draw");
     return;
   }
-  onePlayer();
+  if (checkWin("o")) {
+    console.log("O player win!")
+    return;
+  }
+  player();
 }
 
 function play() {
   console.log("It is a two player game, You need one partner");
   console.log("You Need to give your position like that");
   const table = `
-________
-|0||1||2|
-|3||4||5|
-|6||7||8|
-_________`
+---------
+|1||2||3|
+|4||5||6|
+|7||8||9|
+---------`
   console.log(table);
 
   showTable();
-  onePlayer();
+  player();
 }
 
 play();
