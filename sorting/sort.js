@@ -1,4 +1,5 @@
 let numberOfTimes = 0;
+
 function sort(data) {
   let sortedData = data.slice();
   for (let i = 0; i < data.length; i++) {
