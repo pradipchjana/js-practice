@@ -1,12 +1,18 @@
-const add = (a, b) => {
-  return a + b;
-};
+
+
 
 const test = (testCase) => {
   const actual = testCase.funName(...testCase.fnArgs);
   const expectedValue = testCase.expected;
-  console.log({ actual, expectedValue });
+  const isPassed = actual === expectedValue;
+  const symbol = isPassed ?"✅" : "❌";
+  console.log(`${symbol}---->${testCase.des}`);
+  if (!isPassed) {
+    console.log(...testCase.fnArgs);
+    console.log({ actual, expectedValue });
+  }
 };
+
 const main = () => {
   const testCase = {
     des: "add 1 and 2",
