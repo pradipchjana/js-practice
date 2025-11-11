@@ -27,7 +27,7 @@ function randomElements(numberOfElements) {
 }
 
 function benchMark() {
-  const elements = randomElements(1000000);
+  const elements = randomElements(1000);
   numberOfTimes = 0;
   const sortedData = sort(elements);
   const numberOfElements = sortedData.length;
