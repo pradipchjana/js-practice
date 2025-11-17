@@ -1,32 +1,34 @@
-import { testGeneratePattern, rectanglePattern } from "./patterns.js";
+import { testGeneratePattern, rectanglePattern } from "./main.js";
 
 testGeneratePattern("1 row 1 column", rectanglePattern, [1, 1], '*');
 
 
-const testData = {
-  testHollowRectangle: [
+const testHollowRectangle = [
     {
     desc: "1 row 1 column",
     style: "hollow-rectangle",
     args: [1, 1],
     expected: '*' 
-    } 
+    },
+    {
+    desc: "3 row 3 column",
+    style: "hollow-rectangle",
+    args: [3, 3],
+    expected: '***\n* *\n***' 
+    },
+    {
+    desc: "5 row 5 column",
+    style: "hollow-rectangle",
+    args: [3, 3],
+    expected: '***\n* *\n***'
+    },
+    {
+    desc: "hollow-rectangle",
+    style: "hollow-rectangle",
+    args: [5, 5],
+    expected: '*****\n*   *\n*   *\n*   *\n*****',
+    }
   ]
-};
-
-function testHollowRectangle() {
-  console.log("\nHollow-Rectangle\n");
-
-  testGeneratePattern("3 row 3 column",
-    "hollow-rectangle",
-    [3, 3],
-    '***\n* *\n***');
-  testGeneratePattern("5 row 5 column",
-    "hollow-rectangle",
-    [5, 5],
-    '*****\n*   *\n*   *\n*   *\n*****');
-
-}
 
 function testAlternatingRectangle() {
   console.log('\nAlternatingRectangle\n');
