@@ -77,8 +77,6 @@ const loop = () => {
   updateBall();
   drawPaddle();
   drawBall();
-
-  console.clear();
   console.log(showScreen());
   console.log("Score:", score);
 

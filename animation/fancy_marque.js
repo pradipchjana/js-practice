@@ -35,7 +35,7 @@ const drawText = (screen, x, y, text, direction) => {
   }
 };
 
-const createScreen = (size) =>
+export const createScreen = (size) =>
   Array.from({ length: size }, () =>
     Array.from({ length: size }, () => " ")
   );
