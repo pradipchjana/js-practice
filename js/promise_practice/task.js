@@ -22,10 +22,6 @@ const TASK = {
 
 const tasks = [["task1"], ["task2"], ["task3", "task4"], ["task5"]];
 
-const serialization = (task) => {
-  return task.reduce((p, t) => p.then((_) => TASK[t]()), Promise.resolve());
-}
-
 const main= (tasks) => {
   tasks.reduce((p, ta) => p.then((_) => Promise.all(ta.map((t)=> TASK[t]()))), Promise.resolve());
 }
