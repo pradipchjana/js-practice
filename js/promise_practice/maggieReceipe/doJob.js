@@ -1,15 +1,16 @@
-const task = (file, time) => {
+const task = async (file, time) => {
   const start = Date.now();
+  const instruction = await Deno.readTextFile(file);
   return new Promise((resolve) => {
     setTimeout(() => {
       const end = Date.now();
-      resolve(Deno.readTextFile(file));
+      resolve({ instruction,start,end,time});
     }, time);
   }).then(console.log, console.log);
 };
 
 const process = tasks => tasks.reduce(
-  (p, ta) => p.then((_) => Promise.all(ta.map((t) => task(t, 1000)))),
+  (p, ta) => p.then((_) => Promise.all(ta.map((t) => { const [file, time] = t.split("/");return task(file, time) }))),
   Promise.resolve(),
 );
 
