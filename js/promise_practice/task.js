@@ -15,18 +15,19 @@ const task = (des, time,failProb = 0) => {
 const TASK = {
   "task1": () => task("task1", 3000),
   "task2": () => task("task2", 2000,0.5),
-  "task3": () => task("task3", 1000,1.0),
+  "task3": () => task("task3", 1000, 1.0),
+  "task4": () => task("task4", 4000, ),
+  "task5": () => task("task5", 3000,),
 };
 
-const tasks = ["task1", "task2", "task3"];
+const tasks = [["task1"], ["task2"], ["task3", "task4"], ["task5"]];
 
-const serialization = () => {
-  tasks.reduce((p, t) => p.then((_) => TASK[t]()), Promise.resolve());
+const serialization = (task) => {
+  return task.reduce((p, t) => p.then((_) => TASK[t]()), Promise.resolve());
 }
 
-serialization();
-
-const paralization = () => {
-  tasks.map((t) =>TASK[t]());
+const main= (tasks) => {
+  tasks.reduce((p, ta) => p.then((_) => Promise.all(ta.map((t)=> TASK[t]()))), Promise.resolve());
 }
-paralization();
+
+main(tasks);
