@@ -34,3 +34,18 @@ export const validCol = (grid,x) => {
   return  true;
 }
 
+export const validBlock = (grid,x) => {
+  const isPresent = Array.from({ length: grid.length }, () => 0);
+  for (let y = 0; y < grid.length; y++) {
+    for (let x = 0; x < grid[0].length; x++) {
+      if (grid[y][x] === 0) continue;
+      isPresent[grid[y][x] - 1]++;
+      if (isPresent[grid[y][x] - 1] > 1) {
+        return false;
+      }
+    }
+  }
+  
+  return  true;
+}
+
