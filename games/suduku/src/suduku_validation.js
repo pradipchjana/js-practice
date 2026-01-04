@@ -8,8 +8,22 @@ const input = [
 
 export const validRow = (grid,y) => {
   const isPresent = Array.from({ length: grid[0].length }, () => 0);
-  
+
   for (let x = 0; x < grid.length; x++) {
+    if (grid[y][x] === 0) continue;
+    isPresent[grid[y][x] - 1]++;
+    if (isPresent[grid[y][x] - 1] > 1) {
+      return false;
+    }
+  }
+  
+  return  true;
+}
+
+export const validCol = (grid,x) => {
+  const isPresent = Array.from({ length: grid.length }, () => 0);
+  
+  for (let y = 0; y < grid.length; y++) {
     if (grid[y][x] === 0) continue;
     isPresent[grid[y][x] - 1]++;
     if (isPresent[grid[y][x] - 1] > 1) {
