@@ -5,6 +5,7 @@ const input = [
   [2,3,1],
   [3,1,2],
 ]
+
 export const hasDublicate = (values) => {
   const seen = new Set();
   for (const value of values) {
@@ -24,18 +25,18 @@ export const validCol = (grid,col) => {
   return hasDublicate(column);
 }
 
-export const validBlock = (grid,x) => {
-  const isPresent = Array.from({ length: grid.length }, () => 0);
-  for (let y = 0; y < grid.length; y++) {
-    for (let x = 0; x < grid[0].length; x++) {
-      if (grid[y][x] === 0) continue;
-      isPresent[grid[y][x] - 1]++;
-      if (isPresent[grid[y][x] - 1] > 1) {
-        return false;
-      }
+export const validBlock = (grid, col, row,blockSize) => {
+  const startRow = Math.floor(row / blockSize) * blockSize;
+  const startCol = Math.floor(col / blockSize) * blockSize;
+
+  const blocks = [];
+
+  for (let r = startRow; r < startRow+blockSize; r++) {
+    for (let c = startCol; c < startCol+blockSize; c++) {
+      blocks.push(grid[r][c]);
     }
+    
   }
-  
-  return  true;
+  return hasDublicate(blocks);
 }
 
