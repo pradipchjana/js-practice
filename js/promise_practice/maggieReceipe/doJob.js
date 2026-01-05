@@ -6,7 +6,7 @@ const task = async (file, time) => {
       const end = Date.now();
       resolve({ instruction, start, end, time });
     }, time);
-  }).then(console.log, console.log);
+  }).then(console.table, console.log);
 };
 
 const process = (tasks) =>

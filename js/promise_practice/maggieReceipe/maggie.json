@@ -1,0 +1,7 @@
+{
+  "task1": { "task": "task1.txt", "time": 1000, "type": "serial" },
+  "task2": { "task": "task2.txt", "time": 1000, "type": "serial" },
+  "task3": { "task": "task3.txt", "time": 1000, "type": "paralal" },
+  "task4": { "task": "task4.txt", "time": 1000, "type": "paralal" },
+  "task5": { "task": "task5.txt", "time": 2000, "type": "serial" }
+}
