@@ -1,11 +1,11 @@
 const dbg = (value) => console.log(value) || value;
 
 const grid = [
-        [1, 0, 3, 4],
-        [2, 3, 1, 0],
-        [0, 0, 2, 0],
-        [0, 1, 4, 3],
-      ]
+  [1, 0, 3, 4],
+  [2, 3, 1, 0],
+  [0, 0, 2, 0],
+  [0, 1, 4, 3],
+];
 
 export const hasDublicate = (values) => {
   const seen = new Set();
@@ -42,9 +42,9 @@ export const validBlock = (grid, col, row, blockSize) => {
 
 const isValid = (grid, row, col, blockSize) =>
   validRow(grid, row) && validCol(grid, col) &&
-  validBlock(grid,col,row, blockSize);
+  validBlock(grid, col, row, blockSize);
 
-const validGrib = (grid,blockSize) => {
+export const validGrid = (grid, blockSize) => {
   for (let row = 0; row < grid.length; row++) {
     for (let col = 0; col < grid[0].length; col++) {
       if (!isValid(grid, row, col, blockSize)) {
@@ -55,4 +55,4 @@ const validGrib = (grid,blockSize) => {
   return true;
 };
 
-console.log(validGrib(grid, 2));
+console.log(validGrid(grid, 2));
