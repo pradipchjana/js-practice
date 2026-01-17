@@ -1,4 +1,4 @@
-import { createBoard, setSquare,getSquare } from "../src/board.js";
+import { createBoard, setSquare,getSquare, boardToString } from "../src/board.js";
 import { assertEquals } from "@std/assert";
 import { beforeEach, describe, it } from "@std/testing/bdd";
 
@@ -32,4 +32,13 @@ describe("test getSquare and setSquare", () => {
   it("check try to fetch null value| out of boundary", () => {
     assertEquals(getSquare(board,"w",4), null);
   });
+});
+
+describe("test boardToString", () => {
+  const board = createBoard();
+  const outPut = boardToString(board);
+  
+  it("check it is valid or not", () => {
+    assertEquals(outPut.includes("8. . . . . . . ."), true);
+  })
 });

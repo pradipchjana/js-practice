@@ -17,3 +17,17 @@ export const setSquare = (board, file, rank,peice) => {
     board[row][col] = peice;
   }
 }
+
+export const boardToString = (board) => {
+  let str = "";
+  for (let row = 0; row < board.length; row++) {
+    str += (8 - row) + "";
+    for (let col = 0; col < board[row].length; col++) {
+      const piece = board[row][col];
+      str += (piece || ".") + " ";
+    }
+    str += "\n";
+  }
+  str += "  a b c d e f g h\n";
+  return str;
+}
