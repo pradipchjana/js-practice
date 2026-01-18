@@ -1,6 +1,7 @@
-import { describe, it } from "@std/testing/bdd";
+import { beforeEach, describe, it } from "@std/testing/bdd";
 import { assertEquals } from "@std/assert/equals";
-import { parseMove } from "../src/move.js";
+import { parseMove, trySimpleMove } from "../src/move.js";
+import { createBoard, setSquare } from "../src/board.js";
 
 describe("parseMove -> handels common input formates", () => {
   it("for e2e4", () => {
@@ -17,4 +18,22 @@ describe("parseMove -> handels common input formates", () => {
   // it("for e2--e4", () => {
   //   assertEquals(parseMove("e2-e4"),{fromFile: "e", fromRank: 2, toFile: "e",toRank: 4})
   // })
+})
+
+describe("trysimplemove", () => {
+  const board = createBoard();
+  it("moves piece when target empty", () => {
+    setSquare(board, "e", 2, "p");
+    const move = parseMove("e2e4");
+    const result = trySimpleMove(board, move);
+    assertEquals(result, { success: true, movedPiece: "p" });
+  })
+
+  it("moves piece when target blocked", () => {
+    setSquare(board, "e", 2, "p");
+    setSquare(board, "e", 4, "P");
+    const move = parseMove("e2e4");
+    const result = trySimpleMove(board, move);
+    assertEquals(result, { success: false, error: "Target e4 is not empty" });
+  })
 })
