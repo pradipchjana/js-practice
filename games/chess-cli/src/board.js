@@ -67,9 +67,9 @@ export const setUpStartingPosition=()=> {
 export const boardToString = (board) => {
   let str = "";
   const reset = '\x1b[0m';
-  const lightSqaure = '\x1b[48;5;230m';
+  const lightSqaure = '\x1b[48;5;240m';
   const darkSquare = '\x1b[48;5;94m';
-  const whitePiece = '\x1b[99m';
+  const whitePiece = '\x1b[97m';
   const blackPiece = '\x1b[30m';
 
   for (let row = 0; row < board.length; row++) {
@@ -78,12 +78,12 @@ export const boardToString = (board) => {
       const isLight = (row + col) % 2 === 0;
       const bg = isLight ? lightSqaure : darkSquare;
       const piece = board[row][col];
-      let symbol = piece ? PIECES[piece] || piece : ".";
-      let fg = piece && piece === piece.toUpperCase() ? whitePiece : blackPiece;
+      const symbol = piece ? PIECES[piece] || piece : ".";
+      const fg = piece && piece === piece.toUpperCase() ? whitePiece : blackPiece;
       str += `${bg}${fg} ${symbol} ${reset}`;
     }
     str += "\n";
   }
-  str += "  a b c d e f g h\n";
+  str += "  a  b  c  d  e  f  g  h \n";
   return str;
 }

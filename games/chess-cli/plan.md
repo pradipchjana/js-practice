@@ -37,3 +37,6 @@ test: deno test -A
 2 P P P P P P P P 2
 1 R N B Q K B N R 1
   a b c d e f g h 
+
+**input**
+input can e2e4 or e2-e4 or e2 to e4
