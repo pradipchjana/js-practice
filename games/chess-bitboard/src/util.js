@@ -1,0 +1,1 @@
+export const square = (rank, file) => BigInt(rank * 8 + file);
