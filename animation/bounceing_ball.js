@@ -1,12 +1,15 @@
+const createScreen = () => {
+  return Array.from({ length: SIZE }, () => Array(SIZE).fill(" "));
+}
 const SIZE = 30;
-const screen = Array.from({ length: SIZE }, () => Array(SIZE).fill(" "));
+const FRAME_DELAY = 80;
+const screen = createScreen();
 
-let paddleX = SIZE - 1;
-let paddleStart = 7;
-let paddleWidth = 6;
+const paddle = { x: SIZE - 1, start: 7, width: 6 };
 
-let ball = { x: 5, y: 1, dx: -1, dy: 1 };
+const ball = { x: 15, y: 23, dx: -1, dy: 1 };
 let score = 0;
+let gameOver = false;
 
 const clearScreen = () => {
   for (let i = 0; i < SIZE; i++)
@@ -15,8 +18,8 @@ const clearScreen = () => {
 };
 
 const drawPaddle = () => {
-  for (let i = 0; i < paddleWidth; i++) {
-    screen[paddleX][paddleStart + i] = "_";
+  for (let i = 0; i < paddle.width; i++) {
+    screen[paddle.x][paddle.start + i] = "_";
   }
 };
 
@@ -27,6 +30,12 @@ const drawBall = () => {
 const showScreen = () =>
   screen.map(r => r.join("")).join("\n");
 
+const render = () => {
+  console.clear();
+  console.log(showScreen());
+  console.log("Score: ", score);
+}
+
 const clampBounce = (pos, dir, max) => {
   if (pos < 0) return [-dir, 0];
   if (pos >= max) return [-dir, max - 1];
@@ -34,11 +43,11 @@ const clampBounce = (pos, dir, max) => {
 };
 
 const reflectFromPaddle = () => {
-  let hit = ball.y - paddleStart;
-  let mid = (paddleWidth - 1) / 2;
+  const hit = ball.y - paddle.start;
+  const mid = (paddle.width - 1) / 2;
 
   ball.dx = -1;                
-  ball.dy = Math.sign(hit - mid); 
+  ball.dy = Math.sign(hit - mid) || 1; 
   score++;
 };
 
@@ -50,38 +59,45 @@ const updateBall = () => {
   [ball.dy, ball.y] = clampBounce(ball.y, ball.dy, SIZE);
 
   if (
-    ball.x === paddleX - 1 &&
-    ball.y >= paddleStart &&
-    ball.y < paddleStart + paddleWidth
+    ball.x === paddle.x - 1 &&
+    ball.y >= paddle.start &&
+    ball.y < paddle.start + paddle.width
   ) {
     reflectFromPaddle();
   }
 
-  if (ball.x === SIZE - 1) {
-    console.clear();
-    console.log("GAME OVER — Score:", score);
-    throw "";
+  if (ball.x === SIZE -1) {
+    gameOver = true;
   }
 };
 
-const movePaddle = () => {
-  setTimeout(() => {
-    const key = prompt("a←  d→").trim().toLowerCase();
-    if (key === "a" && paddleStart > 0) paddleStart--;
-    if (key === "d" && paddleStart + paddleWidth < SIZE) paddleStart++;
-  }, 10);
+const readInput = async() => {
+  const buf = new Uint8Array(1);
+  const n = await Deno.stdin.read(buf);
+  if (n) {
+    const key = new TextDecoder().decode(buf).trim().toLowerCase();
+    if (key === "a" && paddle.start > 0) paddle.start--;
+    if (key === "d" && paddle.start + paddle.width < SIZE) paddle.start++;
+  }
+}
+
+const main = async() => {
+  while (!gameOver) {
+    await Promise.race([
+      readInput(),
+      new Promise(r => setTimeout(r, FRAME_DELAY)),
+    ]);
+    clearScreen();
+    updateBall();
+    drawPaddle();
+    drawBall();
+    render();
+  }
+
+  console.clear();
+  console.log("💀 Game Over")
+  console.log("Final score: ", score);
+  Deno.exit(0);
 };
 
-const loop = () => {
-  clearScreen();
-  updateBall();
-  drawPaddle();
-  drawBall();
-  console.log(showScreen());
-  console.log("Score:", score);
-
-  movePaddle();
-  const tm = setTimeout(loop, 80);
-};
-
-loop();
+await main();
