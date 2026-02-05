@@ -37,7 +37,6 @@ describe("test getSquare and setSquare", () => {
 describe("test boardToString", () => {
   const board = createBoard();
   const outPut = boardToString(board);
-  console.log(outPut);
   
   it("check it is valid or not", () => {
     assertEquals(outPut.includes("8 .  .  .  .  .  .  .  ."), false);

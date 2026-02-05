@@ -1,142 +1,112 @@
 const HIGHT = 20;
 const WIDTH = 40;
+const FRAME_DELAY = 200;
 
-function generateRandomNumber(length) {
-  return Math.floor(Math.random() * length);
+function generateRandomNumber(max) {
+  return Math.floor(Math.random() * max);
 }
 
-let snakeX = [6, 5, 4];
-let snakeY = [6, 6, 6];
-let foodX = generateRandomNumber(WIDTH);
-let foodY = generateRandomNumber(HIGHT);
+const DIRECTIONS = {
+  w: { x: 0, y: -1, name: "NORTH" },
+  s: { x: 0, y: 1, name: "SOUTH" },
+  a: { x: -1, y: 0, name: "WEST" },
+  d: { x: 1, y: 0, name: "EAST" },
+};
+
+const snake = [
+  { x: 6, y: 6 },
+  { x: 5, y: 6 },
+  { x: 4, y: 6 }
+];
+
+const isWall = ({ x, y }) => {
+  return x === 0 || y === 0 || x === WIDTH - 1 || y === HIGHT - 1;
+}
+
+const isOnSnake = ({ x, y }) => {
+  return snake.some(seg => seg.x === x && seg.y === y);
+}
+
+const spawnFood = () => {
+  let pos = { x: generateRandomNumber(WIDTH), y: generateRandomNumber(HIGHT) };
+  while (isWall(pos) || isOnSnake(pos)) {
+    pos = { x: generateRandomNumber(WIDTH), y: generateRandomNumber(HIGHT) };
+  }
+  return pos;
+}
+
+let food = spawnFood();
 let score = 0;
-const EAST = 'EAST';
-const NORTH = 'NORTH';
-const SOUTH = 'SOUTH';
-const WEST = 'WEST';
-let direction = EAST;
+let direction = "d";
 let gameOver = false;
 
-function draw() {
+function render() {
   console.clear();
   for (let y = 0; y < HIGHT; y++) {
-    let row = '';
+    let row = "";
+
     for (let x = 0; x < WIDTH; x++) {
-      if (y === 0 || x === 0 || y === HIGHT - 1 || x === WIDTH - 1) {
+      if (isWall({ x, y })) {
         row += "🟩";
-      } else if (x === foodX && y === foodY) {
-        row += '🐰';
+      } else if (x === food.x && y === food.y) {
+        row += "🐰";
       } else {
-        let found = false;
-        for (let index = 0; index < snakeX.length; index++) {
-          if (snakeX[index] === x && snakeY[index] === y) {
-            if (index == 0) {
-              row += "🐲";
-            } else {
-              row += "🦠";
-            }
-            found = true;
-            break;
-          }
-        }
-        if (!found) {
-          row += "  ";
-        }
+        const index = snake.findIndex(s => s.x === x && s.y === y);
+        if (index === 0) row += "🐲";
+        else if (index > 0) row += "🦠";
+        else row += "  ";
       }
     }
     console.log(row);
   }
-  console.log(score);
+  console.log("Score: ",score);
 }
 
-const directions = [NORTH, EAST, SOUTH, WEST];
-const movementKeys = ['w', 'd', 's', 'a'];
+const updateSnake = () => {
+  const head = snake[0];
+  const move = DIRECTIONS[direction];
+  const newHead = { x: head.x + move.x, y: head.y + move.y };
 
-function move(moves) {
-  let newX = snakeX[0];
-  let newY = snakeY[0];
-
-  let movementKey = moves.trim() !== "" ? moves.trim() : movementKeys[directions.indexOf(direction)]
-
-  switch (movementKey) {
-    case 'a': {
-      direction = WEST;
-      newX--;
-      break
-    };
-    case 'd': {
-      direction = EAST;
-      newX++;
-      break;
-    }
-    case 'w': {
-      direction = NORTH;
-      newY--;
-      break;
-    }
-    case 's': {
-      direction = SOUTH;
-      newY++;
-      break;
-    }
-    default:
-      console.clear();
-      draw();
-      play();
-  }
-
-  if (newX <= 0 || newY <= 0 || newX >= WIDTH || newY >= HIGHT) {
+  if (isWall(newHead) || isOnSnake(newHead)) {
     gameOver = true;
     return;
   }
 
-  for (let index = 0; index < snakeX.length; index++) {
-    if (snakeX[index] === newX && snakeY[index] === newY) {
-      gameOver = true;
-      return;
-    }
-  }
+  snake.unshift(newHead);
 
-  snakeX.unshift(newX);
-  snakeY.unshift(newY);
-  if (newX === foodX && newY === foodY) {
+  if (newHead.x === food.x && newHead.y === food.y) {
     score++;
-    changeFoodLocation();
+    food = spawnFood();
   } else {
-    snakeX.pop();
-    snakeY.pop();
+    snake.pop();
   }
 }
 
-function isInSnakePosition() {
-  for (let index = 0; index < snakeX.length; index++) {
-    if (snakeX[index] === foodX && snakeY[index] === foodY) {
-      return true;
-    }
-  }
-  return false;
-}
-
-function changeFoodLocation() {
-  foodX = generateRandomNumber(WIDTH);
-  foodY = generateRandomNumber(HIGHT);
-  if (foodX === 0 || foodX === WIDTH - 1 || foodY === 0 || foodY === HIGHT - 1 || isInSnakePosition()) {
-    changeFoodLocation();
+const readInput = async() => {
+  const buf = new Uint8Array(1);
+  const n = await Deno.stdin.read(buf);
+  if (n) {
+    const key = new TextDecoder().decode(buf).trim();
+    if (DIRECTIONS[key]) direction = key;
   }
 }
 
-function play() {
-  if (gameOver) {
-    console.clear();
-    console.log("GameOver 💀");
-    console.log("Your Score: ", score);
-    return;
+const main= async()=> {
+  render();
+
+  while (!gameOver) {
+    await Promise.race([
+      readInput(),
+      new Promise(r => setTimeout(r, FRAME_DELAY)),
+    ]);
+
+    updateSnake();
+    render();
   }
-  const moves = prompt("Enter Move");
-  move(moves);
-  draw();
-  play();
+  console.clear();
+  console.log("💀 Game Over");
+  console.log("Final Score: ", score);
+  Deno.exit(0);
 }
 
-draw();
-play();
+main();

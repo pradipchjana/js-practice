@@ -1,121 +1,109 @@
-const game = [" ", " ", " ", " ", " ", " ", " ", " ", " "];
-const mark = [true, true, true, true, true, true, true, true, true];
-
-function checkRow(char) {
-  const firstRow = game[0] === char && game[1] === char && game[2] === char;
-  const secondRow = game[3] === char && game[4] === char && game[5] === char;
-  const thirdRow = game[6] === char && game[7] === char && game[8] === char;
-  return firstRow || secondRow || thirdRow;
+const board = Array(9).fill(" ");
+const HUMAN = "X";
+const BOT = "O";
+const WIN_PATTERNS = [
+  [0, 1, 2], [3, 4, 5], [6, 7, 8],
+  [0, 3, 6], [1, 4, 7], [2, 5, 8],
+  [0, 4, 8], [2, 4, 6]
+];
+const isWin=(player)=> {
+  return WIN_PATTERNS.some(pattern =>
+    pattern.every(i => board[i] === player)
+  );
 }
 
-function checkColumn(char) {
-  const firstColumn = game[0] === char && game[3] === char && game[6] === char;
-  const secondColumn = game[1] === char && game[4] === char && game[7] === char;
-  const thirdColum = game[2] === char && game[6] === char && game[8] === char;
-  return firstColumn || secondColumn || thirdColum;
+const isDraw = () => {
+  return board.every(cell => cell !== " ");
 }
 
-function checkDiagonal(char) {
-  const mainDiagonal = game[0] === char && game[4] === char && game[8] === char;
-  const reverseDiagonal = game[2] === char && game[4] === char && game[6] === char;
-  return mainDiagonal || reverseDiagonal;
+const getAvilableMoves = () => {
+  return board.map((v, i) => (v === " " ? i : null)).filter(v => v !== null);
 }
 
-function checkWin(char) {
-  return checkRow(char) || checkColumn(char) || checkDiagonal(char);
+const showBoard=() =>{
+  let output = "";
+  board.forEach((cell,i) => {
+    if (i % 3 === 0 && !i == 0) output += "\n";
+    output += `|${cell}|`;
+  });
+  console.log(output);
 }
 
-function showTable() {
-  let print = "";
-  for (let index = 0; index < game.length; index++) {
-    if (index % 3 === 0 && index != 0) {
-      print += "\n";
-    }
-    print += "|" + game[index] + "|";
+const minmax = (isMaximizing) => {
+  if (isWin(BOT)) return 1;
+  if (isWin(HUMAN)) return -1;
+  if (isDraw()) return 0;
+  const scores = [];
+
+  for (const move of getAvilableMoves()) {
+    board[move] = isMaximizing ? BOT : HUMAN;
+    scores.push(minmax(!isMaximizing));
+    board[move] = ' ';
   }
-  console.log(print);
+  return isMaximizing ? Math.max(...scores) : Math.min(...scores);
 }
 
-function player() {
-  console.log("\nX player turn");
-  const input = parseInt(prompt("Enter position that you want to play:"));
-  const move = input - 1;
-  if (move < 0 || move > 8) {
-    console.log("Invalid Move");
-    player();
-  }
+function bestBotMove() {
+  let bestScore = -Infinity;
+  let nextMove;
 
-  if (mark[move]) {
-    mark[move] = false;
-    game[move] = 'x';
-  } else {
-    console.log("this place already taken, chosse valid");
-    player();
-  }
-
-  if (isAllTRaverse(mark)) {
-    console.log("Match Draw");
-    return;
-  }
-  showTable();
-  if (checkWin("x")) {
-    console.log("X player win!")
-    return;
-  }
-  bot();
-}
-
-function isAllTRaverse() {
-  for (let index = 0; index < mark.length; index++) {
-    if (mark[index]) {
-      return false;
+  for (const move of getAvilableMoves()) {
+    board[move] = BOT;
+    const score = minmax(false);
+    board[move] = " ";
+    if (score> bestScore) {
+      bestScore = score;
+      nextMove = move;
     }
   }
-  return true;
+  return nextMove;
 }
 
-function bot() {
-  console.log("\nO player turn");
-  const input = parseInt(prompt("Enter position that you want to play:"));
-  const move = input - 1;
-  if (move < 0 || move > 8) {
-    console.log("Invalid Move");
-    bot();
+const humanTurn = () => {
+  const input = parseInt(prompt("Enter position(1-9):")) - 1;
+  if (!getAvilableMoves().includes(input)) {
+    console.log("Invalid move,try again");
+    return humanTurn();
   }
+  board[input] = HUMAN;
+}
 
-  showTable();
-  if (mark[move]) {
-    mark[move] = false;
-    game[move] = 'o';
-  } else {
-    console.log("this place already taken, chosse valid");
-    bot();
-  }
-
-  if (isAllTRaverse(mark)) {
-    console.log("Match Draw");
-    return;
-  }
-  if (checkWin("o")) {
-    console.log("O player win!")
-    return;
-  }
-  player();
+const botTurn = () => {
+  const move = bestBotMove();
+  board[move] = BOT;
+  console.log("Bot played at position",move+1);
 }
 
 function play() {
-  console.log("It is a two player game, You need one partner");
   console.log("You Need to give your position like that");
   const table = `
 ---------
 |1||2||3|
 |4||5||6|
 |7||8||9|
----------`
+---------
+You are X and BOT is O`;
   console.log(table);
-
-  showTable();
-  player();
+  while (true) {  
+    showBoard();
+    humanTurn();
+    if (isWin(HUMAN)) {
+      showBoard();
+      console.log("You win");
+      break;
+    }
+    if (isDraw()) {
+      showBoard();
+      console.log("Game draw");
+      break;
+    }
+    botTurn();
+    if (isWin(BOT)) {
+      showBoard();
+      console.log("Bot win");
+      break;
+    }
+  }
 }
 
 play();

@@ -51,7 +51,7 @@ const sierprinski = async (width,height,vertices,useColor) => {
   console.log("press ctrl+c to stop\n");
 
   const canvas = createCanvas(width, height);
-  let current = { x: width / 2, y: height / 2 };
+  const current = { x: width / 2, y: height / 2 };
   let iteration = 0;
   const MAX_ITER = 150_000;
   while (true) {
@@ -61,14 +61,14 @@ const sierprinski = async (width,height,vertices,useColor) => {
     putPoint(canvas, current.x, current.y);
     iteration++;
 
-    if (iteration % 4000 === 0 || iteration === MAX_ITER) {
+    if (iteration % 400 === 0 || iteration === MAX_ITER) {
       console.clear();
       console.log(`Chaos game - ${iteration} points`);
       console.log(renderCanvas(canvas,useColor));
       console.log("".repeat(24) + "heloo");
     };
     if (iteration >= MAX_ITER) {
-      console.log("finioshed");
+      console.log("Finished");
       break;
     }
     await new Promise((resolve) => setTimeout(resolve, 0));
@@ -78,7 +78,7 @@ const sierprinski = async (width,height,vertices,useColor) => {
 const main = (args) => {
   const width = +args[0]||90;
   const height = +args[1] || 55;
-  const useColor =false;
+  const useColor =true;
 
 const vertices = [
   { x: width / 2, y: 1 },
