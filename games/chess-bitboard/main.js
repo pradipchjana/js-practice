@@ -6,7 +6,7 @@ const main = () => {
   // while (true) {
     // console.clear();
     board.print();
-  const color = board.state.turn === 'w' ? "White" : "Black";
+  // const color = board.state.turn === 'w' ? "White" : "Black";
   board.state.turn = 'b';
   board.state.pieces.n = 0x0000000010000000n;
     const pawnMoves = board.generateKnightMoves();

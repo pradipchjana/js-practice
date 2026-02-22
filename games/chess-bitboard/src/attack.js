@@ -102,7 +102,7 @@ export const KNIGHT_ATTACKS = getKnightAttacks();
 export const KING_ATTACKS = getKingAttacks();
 export const PAWN_ATTACKS = getPawnAttacks();
 
-const rookAttacks = (square, occupancy) => {
+export const rookAttacks = (square, occupancy) => {
   let attacks = 0n;
 
   //north
@@ -135,7 +135,7 @@ const rookAttacks = (square, occupancy) => {
   return attacks;
 };
 
-const bishopAttacks = (square, occupancy) => {
+export const bishopAttacks = (square, occupancy) => {
   let attacks = 0n;
 
   for (let s = square + 9; s < 64 && s % 8 !== 0; s += 9) {
@@ -159,6 +159,6 @@ const bishopAttacks = (square, occupancy) => {
   return attacks;
 };
 
-const queenAttacks = (square, occupancy) => {
+export const queenAttacks = (square, occupancy) => {
   return rookAttacks(square, occupancy) | bishopAttacks(square,occupancy);
 }

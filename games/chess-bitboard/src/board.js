@@ -1,9 +1,10 @@
-import { KNIGHT_ATTACKS } from "./attack.js";
+import { bishopAttacks, KNIGHT_ATTACKS, queenAttacks, rookAttacks } from "./attack.js";
 import { Position } from "./positions.js";
 import {
   bitScanForward,
   NOT_FILE_A,
   NOT_FILE_H,
+  popLSB,
   RANK_1,
   RANK_2,
   RANK_7,
@@ -110,5 +111,77 @@ export class Board {
       temp &= temp - 1n;
     }
     return moves;
+  }
+
+  generateRookMoves() {
+    const moves = [];
+    const white = this.state.turn === 'w';
+    const rooks = white ? this.state.pieces.R : this.state.pieces.r;
+
+    const occupancy = this.occupied;
+
+    const temp = rooks;
+    while (temp !== 0n) {
+      const from = popLSB(temp);
+      const attacks = rookAttacks(from, occupancy) & ~occupancy;
+
+      const attackTemp = attacks;
+      while (attackTemp !== 0) {
+        const to = popLSB(attackObj);
+
+        moves.push({
+          from, to, piece: 'rook'
+        });
+      }
+    }
+  }
+
+  generateBishopMoves() {
+    const moves = [];
+    const white = this.state.turn === 'w';
+    const bishops = white ? this.state.pieces.B : this.state.pieces.b;
+    const ownPieces = white ? this.whitePieces : this.blackPieces;
+
+    const occupancy = this.occupied;
+
+    const temp = bishops;
+    while (temp !== 0n) {
+      const from = popLSB(temp);
+      const attacks = bishopAttacks(from, occupancy) & ~ownPieces;
+
+      const attackTemp = attacks;
+      while (attackTemp !== 0) {
+        const to = popLSB(attackObj);
+
+        moves.push({
+          from, to, piece: 'bishop'
+        });
+      }
+    }
+  }
+
+
+  generateQueenMoves() {
+    const moves = [];
+    const white = this.state.turn === 'w';
+    const queens = white ? this.state.pieces.R : this.state.pieces.r;
+    const ownPieces = white ? this.whitePieces : this.blackPieces;
+
+    const occupancy = this.occupied;
+
+    const temp = queens;
+    while (temp !== 0n) {
+      const from = popLSB(temp);
+      const attacks = queenAttacks(from, occupancy) & ~ownPieces;
+
+      const attackTemp = attacks;
+      while (attackTemp !== 0) {
+        const to = popLSB(attackObj);
+
+        moves.push({
+          from, to, piece: 'queen'
+        });
+      }
+    }
   }
 }

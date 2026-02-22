@@ -17,6 +17,13 @@ export const bitScanForward = (bb) => {
   return pos;
 }
 
+export const popLSB = (bb) =>{
+  const lsb = bb & -bb;
+  const square = Number(BigInt.asUintN(64, lsb).toString(2).length - 1);
+  bb &= bb - 1n;
+  return square;// i need to return bb also;
+}
+
 export const FILE_A = 0x01010101_01010101n;
 export const FILE_H = 0x8080808_080808080n;
 
