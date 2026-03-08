@@ -4,7 +4,7 @@ import {
   validCol,
   validGrid,
   validRow,
-} from "../src/suduku_validation.js";
+} from "../src/engine/suduku_validation.js";
 
 Deno.test("Basic sample | valid Row", () => {
   assertEquals(

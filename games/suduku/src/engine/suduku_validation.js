@@ -7,7 +7,7 @@ const grid = [
   [0, 1, 4, 3],
 ];
 
-export const hasDublicate = (values) => {
+export const hasDuplicate = (values) => {
   const withoutZero = values.filter((v) => v !== 0);
   const uniqueElements = new Set(withoutZero);
 
@@ -21,11 +21,11 @@ export const hasDublicate = (values) => {
   // return true;
 };
 
-export const validRow = (grid, row) => hasDublicate(grid[row]);
+export const validRow = (grid, row) => hasDuplicate(grid[row]);
 
 export const validCol = (grid, col) => {
   const column = grid.map((row) => row[col]);
-  return hasDublicate(column);
+  return hasDuplicate(column);
 };
 
 // 3*3
@@ -42,7 +42,7 @@ export const validBlock = (grid, col, row, blockSize) => {
       blocks.push(grid[r][c]);
     }
   }
-  return hasDublicate(blocks);
+  return hasDuplicate(blocks);
 };
 
 const isValid = (grid, row, col, blockSize) =>
