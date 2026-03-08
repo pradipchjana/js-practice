@@ -6,8 +6,6 @@ export default class Sudoku {
     this.board = Array(9).fill().map(() => new Uint8Array(9));
     this.boxIdx = new Uint8Array(81);
     for (let i = 0; i < 81; i++) {
-      console.log(i%9,i/9|0);
-      
       const r = i / 9 | 0;
       const c = i % 9;
       this.boxIdx[i] = (r / 3 | 0) * 3 + (c / 3 | 0);
@@ -54,13 +52,15 @@ export default class Sudoku {
 
     const order = [1, 2, 3, 4, 5, 6, 7, 8, 9];
     this.shuffle(order);
-    const used = this.row[r] | this.col[c] |this.box[b]
+
     for (let i = 0; i <= 9; i++) {
       const num = order[i];
       const mask = 1 << num;
 
       if (
-        (used & mask) === 0 
+        (this.row[r] & mask) === 0 &&
+        (this.col[c] & mask) === 0 &&
+        (this.box[b] & mask) === 0
       ) {
         this.board[r][c] = num;
         this.row[r] |= mask;
@@ -126,11 +126,8 @@ export default class Sudoku {
     this.board.forEach(row => row.fill(0));
 
     this.fillDiagonal();
-    this.print(this.board);
-    console.log("ko");
     
     this.solve();
-    console.log("k",this.print(this.board));
     
     const result = this.digHoles(emptyCount);
 
