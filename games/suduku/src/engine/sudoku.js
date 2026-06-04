@@ -42,7 +42,7 @@ export default class Sudoku {
   solve(pos = 0) {
     if (pos === 81) return true;
     
-    const r = pos /9 | 0;
+    const r = pos /9 | 0; 
     const c = pos %9;
     const b = this.boxIdx[pos];
 
@@ -53,9 +53,9 @@ export default class Sudoku {
     const order = [1, 2, 3, 4, 5, 6, 7, 8, 9];
     this.shuffle(order);
 
-    for (let i = 0; i <= 9; i++) {
+    for (let i = 0; i < 9; i++) {
       const num = order[i];
-      const mask = 1 << num;
+      const mask = 1 << num ;
 
       if (
         (this.row[r] & mask) === 0 &&
@@ -117,7 +117,9 @@ export default class Sudoku {
 
   generate(difficulty = "medium") {
     const emptyCount = {
-      "medium": 42
+      "easy":30,
+      "medium": 42,
+      "hard": 50
     }[difficulty] || 42;
 
     this.row.fill(0);

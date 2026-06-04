@@ -26,11 +26,11 @@ export const getSquare = (board, file, rank) => {
   return board[row][col];
 }
 
-export const setSquare = (board, file, rank,peice) => {
+export const setSquare = (board, file, rank,piece) => {
   const col = file.charCodeAt(0) - "a".charCodeAt(0);
   const row = 8 - rank;
   if (row >= 0 && row < 8 && col >= 0 && col < 8) {
-    board[row][col] = peice;
+    board[row][col] = piece;
   }
 }
 
@@ -67,7 +67,7 @@ export const setUpStartingPosition=()=> {
 export const boardToString = (board) => {
   let str = "";
   const reset = '\x1b[0m';
-  const lightSqaure = '\x1b[48;5;240m';
+  const lightSquare = '\x1b[48;5;240m';
   const darkSquare = '\x1b[48;5;94m';
   const whitePiece = '\x1b[97m';
   const blackPiece = '\x1b[30m';
@@ -76,7 +76,7 @@ export const boardToString = (board) => {
     str += (8 - row) + "";
     for (let col = 0; col < board[row].length; col++) {
       const isLight = (row + col) % 2 === 0;
-      const bg = isLight ? lightSqaure : darkSquare;
+      const bg = isLight ? lightSquare : darkSquare;
       const piece = board[row][col];
       const symbol = piece ? PIECES[piece] || piece : ".";
       const fg = piece && piece === piece.toUpperCase() ? whitePiece : blackPiece;

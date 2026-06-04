@@ -1,7 +1,7 @@
 **High-Level Plan**
 1. Project setup: init deno project add basic required thing
 
-2. Board Repesentation: create function for basic chessboard and display
+2. Board Representation: create function for basic chessboard and display
 
 3. Add module for pieces, place them in a board, and test rendering
 

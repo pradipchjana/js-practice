@@ -4,6 +4,7 @@ const gen = new Sudoku();
 
 const { puzzle, solution } = gen.generate("medium");
 gen.print(puzzle)
-console.log("lop");
+console.log("");
+
 
 gen.print(solution)

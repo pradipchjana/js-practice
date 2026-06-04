@@ -49,7 +49,7 @@ export const validateAndMove = (board, move, currentTurnIsWhite) => {
   if (!piece) {
     return {
       success: false,
-      error: `No Peice on ${move.fromFile}${move.fromRank}`,
+      error: `No Piece on ${move.fromFile}${move.fromRank}`,
     };
   }
   const isWhitePiece = isWhite(piece);
@@ -64,7 +64,7 @@ export const validateAndMove = (board, move, currentTurnIsWhite) => {
   if (targetPiece && isWhite(targetPiece) === isWhitePiece) {
     return {
       success: false,
-      error: `Canot Capture your own piece`,
+      error: `Cannot Capture your own piece`,
     };
   }
 
@@ -131,7 +131,7 @@ export const validateAndMove = (board, move, currentTurnIsWhite) => {
           move.toFile,
           move.toRank,
         );
-      }
+      } 
       break;
     case "K":
       if (Math.max(absFd, absRd) === 1) {
