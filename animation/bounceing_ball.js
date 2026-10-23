@@ -2,7 +2,7 @@ const createScreen = () => {
   return Array.from({ length: SIZE }, () => Array(SIZE).fill(" "));
 }
 const SIZE = 30;
-const FRAME_DELAY = 80;
+const FRAME_DELAY = 120;
 const screen = createScreen();
 
 const paddle = { x: SIZE - 1, start: 7, width: 6 };
@@ -28,7 +28,12 @@ const drawBall = () => {
 };
 
 const showScreen = () =>
-  screen.map(r => r.join("")).join("\n");
+  screen.map(r => {
+    if (r.includes("🥎")) {
+      return "|" + r.join("") + "|";
+    }
+    return "|" + r.join("") + " |";
+  }).join("\n");
 
 const render = () => {
   console.clear();
@@ -47,7 +52,7 @@ const reflectFromPaddle = () => {
   const mid = (paddle.width - 1) / 2;
 
   ball.dx = -1;                
-  ball.dy = Math.sign(hit - mid) || 1; 
+  ball.dy = Math.sign(hit - mid)+1 || 1; 
   score++;
 };
 
