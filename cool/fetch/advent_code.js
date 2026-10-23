@@ -2,12 +2,17 @@ console.time("hello")
 const url =
   "https://adventofcode.com/2019/leaderboard/private/view/829678.json";
 
+const sessionCookie = Deno.env.get("AOC_SESSION");
+if (!sessionCookie) {
+  console.error("Missing AOC_SESSION environment variable");
+  Deno.exit(1);
+}
+
 const response = await fetch(url, {
   method: "GET",
   headers: {
-    "Cookie":
-      `session=53616c7465645f5f580cb5f2d8ee6c544ba9e74386ddaed7e01445f27ae2994fa81201a52dfbfd18d124628787aa35c2a6fa1936ac24d31659bd4da82d1fd6c7`,
-    "User-Agent": "yourname-deno-aoc",
+    "Cookie": `session=${sessionCookie}`,
+    "User-Agent": "Pradip-AoC-Leaderboard-Script",
   },
 });
 
